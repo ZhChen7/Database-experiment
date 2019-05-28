@@ -27,6 +27,7 @@ router.post('/add',function (req,res,next) {
 })
 
 router.get('/delete',function (req,res,next) {
+    console.log('11111')
     console.log(req.query)
     let  deleteSql = 'DELETE FROM user  WHERE id = ?';
     let  deleteSqlParams =req.query.id;
@@ -34,11 +35,12 @@ router.get('/delete',function (req,res,next) {
         if(err){
             console.log(err);
         }
-        db.query('select * from user', [],function(result,fields){
-            res.render('index.html',{
-                result:result
-            })
-        });
+        // db.query('select * from user', [],function(result,fields){
+        //     res.render('index.html',{
+        //         result:result
+        //     })
+        // });
+        res.redirect(302, '/');
     })
 })
 
