@@ -65,22 +65,39 @@ router.post('/fix', function (req, res, next) {
 })
 
 router.post('/search', function (req, res, next) {
-    console.log(req.body)
+    // console.log(req.body)
     arr = []
     db.query('select * from user', [], function (result, fields) {
-        console.log(result)
+        // console.log(result)
         result.forEach(function (e) {
             if (e.id.indexOf(req.body.value) >= 0 || e.username.indexOf(req.body.value) >= 0 || e.tel.indexOf(req.body.value) >= 0) {
                 arr.push(e)
             }
         })
+        if (arr.length >= 2) {
+            if (arr[arr.length - 2].username == arr[arr.length - 1].username) {
+                arr.pop()
+            }
+        }
         return res.status(200).json({
             err_code: 0,
             message: arr
         })
     });
 
+})
 
+router.post('/searchbyname', function (req, res, next) {
+    searchbynamesql = 'SELECT * FROM user,extra\n' +
+        'WHERE user.username=extra.username\n' +
+        'AND user.username=?\n'
+    searchbynameParams = req.body.value
+    db.query(searchbynamesql, searchbynameParams, function (result, fields) {
+        return res.status(200).json({
+            err_code: 0,
+            message: result
+        })
+    })
 })
 
 module.exports = router;

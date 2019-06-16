@@ -129,8 +129,22 @@
                 </table>
             </ul>
         </div>
-
     </div>
+
+    <div class="input-group" style="width: 60%;">
+        <input id="input3" type="text" class="form-control" placeholder="根据姓名查找:" >
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <ul class="list-group listAll" style="margin-top: 15px">
+                <table class="table table-striped table-bordered table-hover searchtablebyname">
+
+                </table>
+            </ul>
+        </div>
+    </div>
+
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/canvas-nest.js/dist/canvas-nest.js"></script>
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -158,14 +172,13 @@
         })
 
         $("#input1").bind("input propertychange", function (event) {
-            console.log($("#input1").val())
             $.ajax({
                 url: '/search',
                 type: 'post',
                 data: {"value": $("#input1").val()},
                 dataType: 'json',
             }).then((data) => {
-                console.log(data.message)
+                // console.log(data.message)
                 data = data.message
                 let html = `<tr>
                         <td>id</td>
@@ -180,6 +193,38 @@
                 </tr>`
                 }
                 $('.searchtable').html(html)
+            })
+        });
+
+
+        $("#input3").bind("input propertychange", function (event) {
+            $.ajax({
+                url: '/searchbyname',
+                type: 'post',
+                data: {"value": $("#input3").val()},
+                dataType: 'json',
+            }).then((data) => {
+                // console.log(data.message)
+                data = data.message
+                let html = `<tr>
+                        <td>id</td>
+                        <td>userName</td>
+                        <td>tel</td>
+                        <td>hobby</td>
+                        <td>sex</td>
+                        <td>age</td>
+                    </tr>`
+                for (let i in data) {
+                    html += `<tr>
+                <td>${data[i].id}</td>
+                <td>${data[i].username}</td>
+                <td>${data[i].tel}</td>
+                <td>${data[i].hobby}</td>
+                <td>${data[i].sex}</td>
+                <td>${data[i].age}</td>
+                </tr>`
+                }
+                $('.searchtablebyname').html(html)
             })
         });
     </script>
